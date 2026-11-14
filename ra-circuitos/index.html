@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Laboratorio RA · Circuitos</title>
+  <!-- A-Frame y MindAR (seguimiento de imágenes) -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <script src="./circuito.js"></script>
+  <script src="./app.js"></script>
+  <link rel="stylesheet" href="./estilos.css">
+</head>
+<body>
+  <!-- Escena de realidad aumentada -->
+  <a-scene id="escena"
+           mindar-image="imageTargetSrc: ./targets.mind; uiScanning: no; uiLoading: yes; uiError: yes; filterMinCF: 0.0001; filterBeta: 0.001"
+           color-space="sRGB" renderer="colorManagement: true"
+           vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    <a-entity light="type: ambient; intensity: 0.9"></a-entity>
+    <a-entity light="type: directional; intensity: 0.7" position="0.5 1 1"></a-entity>
+    <a-entity id="objetivo" mindar-image-target="targetIndex: 0">
+      <a-entity id="circuito"></a-entity>
+    </a-entity>
+  </a-scene>
+
+  <!-- Barra superior -->
+  <header class="barra">
+    <div class="titulo">Laboratorio RA · Circuitos</div>
+    <div id="estado" class="pastilla esperando">Iniciando cámara…</div>
+  </header>
+
+  <!-- Aviso de búsqueda del marcador -->
+  <div id="aviso" class="aviso">Apunta la cámara al marcador de la guía impresa</div>
+
+  <!-- Panel de medición (para la demostración) -->
+  <button id="btnMedicion" class="flotante" aria-expanded="false">Medición</button>
+  <section id="medicion" class="medicion oculto" aria-label="Medición de la prueba">
+    <div class="fila"><span>Detección inicial</span><b id="mDeteccion">—</b></div>
+    <div class="fila"><span>Pérdidas del marcador</span><b id="mPerdidas">0</b></div>
+    <div class="fila"><span>Última recuperación</span><b id="mRecuperacion">—</b></div>
+    <div class="fila"><span>Recuperación máxima</span><b id="mRecMax">—</b></div>
+    <div class="fila"><span>Cuadros por segundo</span><b id="mFps">—</b></div>
+    <div class="fila"><span>Equipo</span><b id="mEquipo">—</b></div>
+    <ol id="registro" class="registro"></ol>
+    <button id="btnCopiar" class="secundario">Copiar registro</button>
+  </section>
+
+  <!-- Panel inferior con los escenarios -->
+  <section class="panel">
+    <nav class="pestanas" role="tablist">
+      <button class="pestana activa" data-esc="1" role="tab">1 · Circuito LED</button>
+      <button class="pestana" data-esc="2" role="tab">2 · Ley de Ohm</button>
+      <button class="pestana" data-esc="3" role="tab">3 · Sensor de luz</button>
+    </nav>
+
+    <div id="ctl1" class="controles">
+      <button id="btnInterruptor" class="principal">Cerrar interruptor</button>
+    </div>
+
+    <div id="ctl2" class="controles oculto">
+      <div class="opciones">
+        <button class="opcion activa" data-r="220">220 Ω</button>
+        <button class="opcion" data-r="470">470 Ω</button>
+        <button class="opcion" data-r="1000">1 kΩ</button>
+        <button class="opcion peligro" data-r="0">0 Ω</button>
+      </div>
+      <div class="libre">
+        <input id="rLibre" inputmode="decimal" placeholder="Otro valor en Ω" aria-label="Otro valor de resistencia">
+        <button id="btnAplicar" class="secundario">Aplicar</button>
+      </div>
+    </div>
+
+    <div id="ctl3" class="controles oculto">
+      <label for="luz" class="etiqueta-luz">Luz sobre el sensor: <b id="luzValor">80 %</b></label>
+      <input id="luz" type="range" min="0" max="100" step="5" value="80">
+    </div>
+
+    <div class="info">
+      <div class="dato"><span id="dato1Nombre">Corriente</span><b id="dato1">0,0 mA</b></div>
+      <div class="dato"><span id="dato2Nombre">LED</span><b id="dato2">Apagado</b></div>
+      <p id="mensaje" class="mensaje">Circuito abierto: no circula corriente.</p>
+    </div>
+  </section>
+
+  <!-- Error de cámara -->
+  <div id="errorCamara" class="error oculto">
+    <p><b>No se pudo usar la cámara.</b></p>
+    <p>Concede el permiso de cámara al navegador y abre la página desde su dirección https.</p>
+  </div>
+</body>
+</html>
