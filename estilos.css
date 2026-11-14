@@ -9,7 +9,11 @@
   --peligro: #ef4444;
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; overflow: hidden; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--texto); background: #000; }
+/* Sin fondo: el video de la cámara que inserta MindAR queda detrás del body (z-index negativo);
+   un fondo en html o body lo taparía y la pantalla se vería negra. */
+html, body { margin: 0; height: 100%; overflow: hidden; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--texto); background: transparent; }
+/* Oculta los botones VR/AR que A-Frame agrega por defecto */
+.a-enter-vr, .a-enter-ar, .a-enter-vr-button, .a-enter-ar-button { display: none !important; }
 .oculto { display: none !important; }
 
 /* Las capas de MindAR quedan debajo de la interfaz */
@@ -24,7 +28,7 @@ html, body { margin: 0; height: 100%; overflow: hidden; font-family: system-ui, 
 .pastilla.detectado { background: #166534; }
 .pastilla.perdido { background: #991b1b; }
 
-.aviso { top: 52px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); max-width: 420px;
+.aviso { top: 100px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); max-width: 420px;
   text-align: center; font-size: 14px; padding: 8px 12px; border-radius: 10px; background: rgba(146, 64, 14, 0.9); }
 
 .flotante { top: 52px; right: 12px; }
